@@ -1,0 +1,18 @@
+---
+import ToolLayout from "@/layouts/ToolLayout.astro";
+import FormulaVisualizerEngine from "@/engines/formula-visualizer/FormulaVisualizerEngine";
+import { FORMULA_SLUGS_LIVE, getBySlug } from "@/lib/formulas";
+
+export function getStaticPaths() {
+  return FORMULA_SLUGS_LIVE.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const config = getBySlug(slug)!;
+---
+<ToolLayout config={config} subPage="index">
+  <!-- Pass only the slug string — functions cannot cross the Astro→React serialization boundary.
+       The engine resolves the full config (including compute/render functions) from the
+       client-side registry using the slug. -->
+  <FormulaVisualizerEngine slug={slug} client:only="react" />
+</ToolLayout>

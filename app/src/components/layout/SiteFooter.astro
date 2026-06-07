@@ -1,0 +1,50 @@
+---
+import Icon from "@/components/icons/Icon.astro";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+---
+<footer class="mt-20 py-14 text-sm text-muted-foreground" style="background: var(--background);">
+  <div class="w-full page-wrap grid grid-cols-1 sm:grid-cols-4 gap-10">
+
+    <div class="sm:col-span-2">
+      <a href="/" class="inline-flex items-center gap-2 font-display font-bold text-base mb-3 text-foreground">
+        <span
+          class="flex h-6 w-6 items-center justify-center rounded-md neu-raised"
+          style="background: var(--brand); color: #ffffff;"
+        >
+          <Icon name="globe" size={14} />
+        </span>
+        {SITE_NAME}
+      </a>
+      <p class="text-xs leading-relaxed max-w-sm">
+        Interactive formula visualizers for math, physics, finance, chemistry, and engineering. Free, open-access, and ad-supported.
+      </p>
+    </div>
+
+    <div>
+      <div class="text-[11px] uppercase tracking-widest font-semibold text-foreground mb-4">Categories</div>
+      <ul class="space-y-2 text-xs">
+        <li><a href="/formulas/math"        class="hover:text-foreground transition-colors">Mathematics</a></li>
+        <li><a href="/formulas/physics"     class="hover:text-foreground transition-colors">Physics</a></li>
+        <li><a href="/formulas/finance"     class="hover:text-foreground transition-colors">Finance</a></li>
+        <li><a href="/formulas/chemistry"   class="hover:text-foreground transition-colors">Chemistry</a></li>
+        <li><a href="/formulas/engineering" class="hover:text-foreground transition-colors">Engineering</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="text-[11px] uppercase tracking-widest font-semibold text-foreground mb-4">Info</div>
+      <ul class="space-y-2 text-xs">
+        <li><a href="/about"    class="hover:text-foreground transition-colors">About</a></li>
+        <li><a href="/privacy"  class="hover:text-foreground transition-colors">Privacy Policy</a></li>
+        <li><a href="/formulas" class="hover:text-foreground transition-colors">All Formulas</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="w-full page-wrap mt-12 pt-8 neu-divider text-[11px] flex flex-col sm:flex-row justify-between gap-3">
+    <span>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</span>
+    <span>
+      <a href={SITE_URL} class="hover:text-foreground transition-colors">{SITE_URL}</a>
+    </span>
+  </div>
+</footer>

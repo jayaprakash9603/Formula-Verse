@@ -1,0 +1,18 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+<BaseLayout title="Page Not Found" noIndex={true}>
+  <div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 gap-6">
+    <div class="text-8xl">🌌</div>
+    <h1 class="font-display font-bold text-4xl">Formula Not Found</h1>
+    <p class="text-muted-foreground max-w-sm">
+      This formula drifted off to another dimension. Try browsing all available visualizers below.
+    </p>
+    <a
+      href="/formulas"
+      class="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-6 py-3 font-medium hover:bg-primary/90 transition-colors"
+    >
+      Browse All Formulas
+    </a>
+  </div>
+</BaseLayout>

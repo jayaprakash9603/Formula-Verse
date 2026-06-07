@@ -1,0 +1,59 @@
+---
+description: Neumorphism design system for FormulaVerse — all UI must use neu tokens and abstractions
+globs: app/src/**/*
+alwaysApply: false
+---
+
+# Neumorphism Design System
+
+FormulaVerse uses a neumorphic (soft UI) design system. All new and modified components must follow these rules.
+
+## Required tokens
+
+| Token | Light | Dark |
+|-------|-------|------|
+| Surface / background | `#E7E5E4` | `#2b2f36` |
+| Brand / primary | `#006666` | `#00a3a3` |
+| Text | `#1E2938` | `#e8eaed` |
+| Secondary | `#F1F2F5` | `#353a42` |
+| Success | `#00A63D` | `#00A63D` |
+| Warning | `#FE9900` | `#FE9900` |
+| Danger | `#FF2157` | `#FF2157` |
+
+Fonts: **Space Mono** (sans + display), **JetBrains Mono** (mono).
+
+## Abstraction layer
+
+1. **CSS utilities** in `src/styles/globals.css`: `.neu-raised`, `.neu-flat`, `.neu-inset`, `.neu-pressed`, `.neu-interactive`, `.neu-divider`
+2. **CVA helper** in `src/lib/neu.ts`: `neuVariants({ elevation, shape, interactive })`
+
+## Rules (must)
+
+- Use `neuVariants()` or `.neu-*` classes for all elevation and surface styling
+- Keep `background` and `card` the same surface color as the page
+- Use semantic CSS variables (`var(--brand)`, `var(--foreground)`, etc.) — never hardcode hex in components
+- Provide `focus-visible:ring-2 focus-visible:ring-ring` on interactive elements
+- Use `neu-inset` for inputs, search fields, slider tracks, and pressed states
+- Use `neu-raised` for cards, buttons, modals, and elevated panels
+- Use `neu-divider` instead of `border-t` / `border-b` for section separators
+
+## Rules (must not)
+
+- Do not use raw `border`, `border-border`, `shadow`, `shadow-lg`, or `box-shadow` in component classNames
+- Do not use pure white (`#fff`) or pure black (`#000`) as surface backgrounds
+- Do not hardcode shadow values in inline styles
+- Do not mix flat/material borders with neumorphic surfaces in the same component
+
+## Component states
+
+Interactive components must handle: default, hover (`neu-interactive` lift), active/pressed (`neu-pressed` or `:active`), focus-visible, disabled, loading, error (as relevant).
+
+## QA checklist (code review)
+
+- [ ] No raw `border` or `box-shadow` in changed files
+- [ ] Surfaces use `var(--background)` / `var(--card)` tokens
+- [ ] Elevation comes from `neuVariants` or `.neu-*` only
+- [ ] Focus rings visible on keyboard navigation
+- [ ] Works in both `.light` and `.dark` themes
+- [ ] Text contrast meets WCAG AA on surface `#E7E5E4`
+- [ ] New React primitives import from `@/lib/neu`

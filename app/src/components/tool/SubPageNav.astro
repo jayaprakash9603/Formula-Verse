@@ -1,0 +1,29 @@
+---
+interface Props {
+  slug: string;
+  current: "index" | "guide" | "examples" | "faq";
+}
+const { slug, current } = Astro.props;
+const base = `/tools/${slug}`;
+const links = [
+  { key: "index" as const, label: "Tool", href: base },
+  { key: "guide" as const, label: "Guide", href: `${base}/guide` },
+  { key: "examples" as const, label: "Examples", href: `${base}/examples` },
+  { key: "faq" as const, label: "FAQ", href: `${base}/faq` },
+];
+---
+<nav class="flex gap-1 flex-wrap">
+  {links.map((l) => (
+    <a
+      href={l.href}
+      class:list={[
+        "px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+        current === l.key
+          ? "bg-primary text-primary-foreground"
+          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+      ]}
+    >
+      {l.label}
+    </a>
+  ))}
+</nav>

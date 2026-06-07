@@ -1,0 +1,7 @@
+# Formula slug aliases
+/formula/:slug /tools/:slug 301
+/category/:slug /formulas/:slug 301
+/calculator/:slug /tools/:slug 301
+
+# Search redirect: no dedicated page, redirect to formulas hub
+/search /formulas 302

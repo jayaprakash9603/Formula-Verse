@@ -1,0 +1,102 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import SubPageNav from "@/components/tool/SubPageNav.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import FormulaSidebar from "@/components/layout/FormulaSidebar";
+import {
+  buildBreadcrumbJsonLd,
+  buildSoftwareAppJsonLd,
+  buildHowToJsonLd,
+  buildFaqJsonLd,
+} from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
+import { getLiveFormulas } from "@/lib/formulas";
+import type { FormulaVisualizerConfig } from "@/engines/formula-visualizer/types";
+
+interface Props {
+  config: FormulaVisualizerConfig;
+  subPage: "index" | "guide" | "examples" | "faq";
+}
+
+const { config, subPage } = Astro.props;
+
+const baseUrl = `${SITE_URL}/tools/${config.slug}`;
+const pageUrl = subPage === "index" ? baseUrl : `${baseUrl}/${subPage}`;
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Formulas", href: "/formulas" },
+  { label: config.category.charAt(0).toUpperCase() + config.category.slice(1), href: `/formulas/${config.category}` },
+  { label: config.name, ...(subPage !== "index" ? { href: baseUrl } : {}) },
+  ...(subPage !== "index" ? [{ label: subPage.charAt(0).toUpperCase() + subPage.slice(1) }] : []),
+];
+
+const jsonLdBlocks = [
+  buildBreadcrumbJsonLd(crumbs.map((c) => ({ name: c.label, url: (c as { href?: string }).href ? `${SITE_URL}${(c as { href: string }).href}` : undefined }))),
+  buildSoftwareAppJsonLd(config, baseUrl),
+  ...(subPage === "guide" ? [buildHowToJsonLd(config, pageUrl)] : []),
+  ...(subPage === "faq" ? [buildFaqJsonLd(config, pageUrl)] : []),
+];
+
+/* Build sidebar formula data — serialisable (no functions) */
+const sidebarFormulas = getLiveFormulas().map((f) => ({
+  slug: f.slug,
+  name: f.name,
+  category: f.category,
+  shortForm: f.shortForm,
+  difficulty: f.difficulty,
+}));
+---
+<BaseLayout
+  title={config.seo.title}
+  description={config.seo.description}
+  ogImage={`/og/${config.slug}.png`}
+  canonical={pageUrl}
+>
+  <Fragment slot="head">
+    {jsonLdBlocks.map((block) => <JsonLd data={block} />)}
+  </Fragment>
+
+  <!-- Full-width flex wrapper: sidebar + main -->
+  <div class="flex w-full tool-layout-wrap">
+
+    <!-- Sidebar — sticky on desktop, slide-over on mobile -->
+    <FormulaSidebar
+      formulas={sidebarFormulas}
+      currentSlug={config.slug}
+      client:load
+    />
+
+    <!-- Main content area -->
+    <div class="flex-1 min-w-0 overflow-x-hidden flex flex-col">
+
+      <!-- Breadcrumbs + sub-page nav -->
+      <div class="w-full px-4 sm:px-6 py-3 tool-topbar neu-flat">
+        <Breadcrumbs items={crumbs} />
+        {subPage !== "index" && (
+          <div class="mt-2">
+            <SubPageNav slug={config.slug} current={subPage} />
+          </div>
+        )}
+      </div>
+
+      <!-- Page slot (FormulaVisualizerEngine or guide/examples/faq content) -->
+      <div class="flex-1">
+        <slot />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tool-layout-wrap {
+    min-height: calc(100vh - 56px);
+  }
+  .tool-topbar {
+    background: var(--background);
+    position: sticky;
+    top: 56px;
+    z-index: 20;
+  }
+</style>

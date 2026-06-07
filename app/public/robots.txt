@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /404
+Disallow: /_astro/
+
+Sitemap: https://formulaverse.tools/sitemap-index.xml

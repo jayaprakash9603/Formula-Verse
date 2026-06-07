@@ -1,0 +1,36 @@
+---
+import ThemeToggle from "./ThemeToggle";
+import GlobalSearch from "@/components/site/GlobalSearch";
+import Icon from "@/components/icons/Icon.astro";
+---
+<header
+  class="sticky top-0 z-50 w-full neu-flat"
+  style="background: var(--header-bg);"
+>
+  <div class="w-full page-wrap h-14 flex items-center justify-between gap-3">
+
+    <a href="/" class="flex items-center gap-2 font-display font-bold text-lg shrink-0 group">
+      <span
+        class="flex h-7 w-7 items-center justify-center rounded-lg neu-raised transition-transform group-hover:scale-105"
+        style="background: var(--brand); color: #ffffff;"
+      >
+        <Icon name="globe" size={16} />
+      </span>
+      <span class="text-foreground tracking-tight">FormulaVerse</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-1 text-sm flex-1 justify-center">
+      <a href="/formulas" class="px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground neu-interactive transition-colors">All Formulas</a>
+      <a href="/formulas/math" class="px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground neu-interactive transition-colors">Math</a>
+      <a href="/formulas/physics" class="px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground neu-interactive transition-colors">Physics</a>
+      <a href="/formulas/finance" class="px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground neu-interactive transition-colors">Finance</a>
+      <a href="/formulas/chemistry" class="px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground neu-interactive transition-colors hidden lg:block">Chemistry</a>
+      <a href="/formulas/engineering" class="px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground neu-interactive transition-colors hidden lg:block">Engineering</a>
+    </nav>
+
+    <div class="flex items-center gap-2 shrink-0">
+      <GlobalSearch client:idle />
+      <ThemeToggle client:load />
+    </div>
+  </div>
+</header>

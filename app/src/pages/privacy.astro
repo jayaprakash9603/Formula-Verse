@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+---
+<BaseLayout
+  title={`Privacy Policy — ${SITE_NAME}`}
+  description={`Privacy policy for ${SITE_NAME}.`}
+  canonical={`${SITE_URL}/privacy`}
+>
+  <div class="w-full page-wrap py-16">
+    <h1 class="font-display font-bold text-4xl mb-6">Privacy Policy</h1>
+    <p class="text-xs text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" })}</p>
+    <div class="space-y-6 text-muted-foreground leading-relaxed text-sm">
+      <section>
+        <h2 class="font-display font-semibold text-lg text-foreground mb-2">1. Information We Collect</h2>
+        <p>We do not collect personally identifiable information. Anonymous analytics (page views, referrers) may be collected via Cloudflare Web Analytics.</p>
+      </section>
+      <section>
+        <h2 class="font-display font-semibold text-lg text-foreground mb-2">2. Advertising</h2>
+        <p>We display Google AdSense advertisements. Google may use cookies to serve personalised ads based on your browsing history. You can opt out at <a href="https://adssettings.google.com" class="text-primary hover:underline" rel="noopener noreferrer">adssettings.google.com</a>.</p>
+      </section>
+      <section>
+        <h2 class="font-display font-semibold text-lg text-foreground mb-2">3. Cookies</h2>
+        <p>We use no first-party cookies. Third-party cookies may be set by Google AdSense for advertising purposes.</p>
+      </section>
+      <section>
+        <h2 class="font-display font-semibold text-lg text-foreground mb-2">4. Contact</h2>
+        <p>For privacy concerns, contact us at the email listed on our website.</p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

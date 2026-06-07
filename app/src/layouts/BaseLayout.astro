@@ -1,0 +1,132 @@
+---
+import "@fontsource-variable/jetbrains-mono";
+import "@/styles/globals.css";
+import { ViewTransitions } from "astro:transitions";
+import SiteHeader from "@/components/layout/SiteHeader.astro";
+import SiteFooter from "@/components/layout/SiteFooter.astro";
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title,
+  description = SITE_DESCRIPTION,
+  ogImage = "/og/default.png",
+  canonical,
+  noIndex = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Interactive Formula Visualizer`;
+const canonicalUrl = canonical ?? `${SITE_URL}${Astro.url.pathname}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link href="https://fonts.bunny.net/css?family=space-mono:400,700" rel="stylesheet" />
+
+    <!--
+      Theme init — must run before first paint AND after every View Transition
+      swap to avoid flash of wrong theme. `is:inline` ensures it runs on the
+      initial load; the astro:after-swap listener handles subsequent navigations.
+    -->
+    <script is:inline>
+      (function applyTheme() {
+        const stored = localStorage.getItem("fv-theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = stored === "dark" || (!stored && prefersDark) || (!stored && !window.matchMedia("(prefers-color-scheme: light)").matches);
+        document.documentElement.classList.toggle("dark", isDark);
+        document.documentElement.classList.toggle("light", !isDark);
+      })();
+      // Re-apply theme after every client-side navigation swap
+      document.addEventListener("astro:after-swap", function () {
+        const stored = localStorage.getItem("fv-theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = stored === "dark" || (!stored && prefersDark) || (!stored && !window.matchMedia("(prefers-color-scheme: light)").matches);
+        document.documentElement.classList.toggle("dark", isDark);
+        document.documentElement.classList.toggle("light", !isDark);
+      });
+    </script>
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noIndex && <meta name="robots" content="noindex,nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={`${SITE_URL}${ogImage}`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content={SITE_NAME} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${SITE_URL}${ogImage}`} />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Theme color -->
+    <meta name="theme-color" id="theme-color-meta" content="#E7E5E4" />
+
+    <!-- KaTeX CDN — persisted across navigations via transition:persist -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+
+    <!-- Astro View Transitions — client-side navigation, no full page reloads -->
+    <ViewTransitions />
+
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <!-- transition:persist keeps the header mounted across navigations (no flicker) -->
+    <div transition:persist="site-header">
+      <SiteHeader />
+    </div>
+
+    <main transition:animate="fade">
+      <slot />
+    </main>
+
+    <div transition:persist="site-footer">
+      <SiteFooter />
+    </div>
+
+    <!-- Sync theme-color meta tag -->
+    <script is:inline>
+      (function () {
+        function updateThemeColor() {
+          const isDark = document.documentElement.classList.contains("dark");
+          const meta = document.getElementById("theme-color-meta");
+          if (meta) meta.setAttribute("content", isDark ? "#2b2f36" : "#E7E5E4");
+        }
+        updateThemeColor();
+        new MutationObserver(updateThemeColor).observe(document.documentElement, {
+          attributes: true, attributeFilter: ["class"],
+        });
+        document.addEventListener("astro:after-swap", updateThemeColor);
+      })();
+    </script>
+  </body>
+</html>

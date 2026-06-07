@@ -1,0 +1,130 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import Icon from "@/components/icons/Icon.astro";
+import { buildCollectionPageJsonLd } from "@/lib/seo";
+import { getLiveFormulas, getFeaturedFormulas } from "@/lib/formulas";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
+
+const formulas = getLiveFormulas();
+const featured = getFeaturedFormulas(3);
+
+const CATEGORY_META: Record<string, { icon: string; label: string }> = {
+  math:        { icon: "calculator",    label: "Mathematics" },
+  physics:     { icon: "zap",           label: "Physics" },
+  finance:     { icon: "trending-up",   label: "Finance" },
+  chemistry:   { icon: "flask-conical", label: "Chemistry" },
+  engineering: { icon: "settings",      label: "Engineering" },
+};
+
+const jsonLd = buildCollectionPageJsonLd(formulas, `${SITE_URL}/formulas`);
+---
+<BaseLayout
+  title={`All Interactive Formula Visualizers — ${SITE_NAME}`}
+  description="Browse 12+ interactive formula visualizers covering math, physics, finance, chemistry, and engineering. Adjust sliders and see results live."
+  canonical={`${SITE_URL}/formulas`}
+>
+  <Fragment slot="head">
+    <JsonLd data={jsonLd} />
+  </Fragment>
+
+  <div class="w-full page-wrap py-16">
+    <!-- Hero -->
+    <div class="text-center mb-14 max-w-2xl mx-auto">
+      <div class="text-[11px] uppercase tracking-widest text-muted-foreground mb-3">— Library</div>
+      <h1 class="font-display font-bold text-4xl sm:text-5xl tracking-tight mb-4">
+        Interactive formula visualizers
+      </h1>
+      <p class="text-muted-foreground text-base sm:text-lg">
+        Understand math, physics, finance, and engineering formulas through live animations, real-world examples, and instant calculations — no sign-up required.
+      </p>
+    </div>
+
+    <!-- Category cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-14">
+      {Object.entries(CATEGORY_META).map(([key, meta]) => (
+        <a
+          href={`/formulas/${key}`}
+          class="group flex flex-col items-start gap-3 neu-raised rounded-2xl bg-card p-5 transition-all formula-card-hover"
+        >
+          <div
+            class="flex h-10 w-10 items-center justify-center rounded-xl"
+            style="background: var(--muted); color: var(--foreground);"
+          >
+            <Icon name={meta.icon} size={18} />
+          </div>
+          <div>
+            <div class="text-sm font-semibold text-foreground group-hover:text-[var(--brand)] transition-colors">
+              {meta.label}
+            </div>
+            <div class="text-[11px] uppercase tracking-widest text-muted-foreground mt-1">
+              {formulas.filter((f) => f.category === key).length} tools
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Featured -->
+    <h2 class="font-display font-semibold text-2xl tracking-tight mb-6">Featured visualizers</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-14">
+      {featured.map((f) => (
+        <a
+          href={`/tools/${f.slug}`}
+          class="neu-raised rounded-2xl bg-card p-6 formula-card-hover group"
+        >
+          <div class="text-2xl mb-3">{f.emoji}</div>
+          <div class="font-display font-semibold mb-1 group-hover:text-[var(--brand)] transition-colors">{f.name}</div>
+          <div class="font-mono text-xs text-muted-foreground mb-2">{f.shortForm}</div>
+          <div class="text-xs text-muted-foreground leading-relaxed">{f.tagline}</div>
+        </a>
+      ))}
+    </div>
+
+    <!-- All formulas grid -->
+    <h2 class="font-display font-semibold text-2xl tracking-tight mb-6">All formulas ({formulas.length})</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
+      {formulas.map((f) => {
+        const meta = CATEGORY_META[f.category];
+        return (
+          <a
+            href={`/tools/${f.slug}`}
+            class="flex gap-4 neu-raised rounded-2xl bg-card p-5 formula-card-hover group"
+          >
+            <span class="text-2xl shrink-0">{f.emoji}</span>
+            <div class="min-w-0">
+              <div class="font-medium text-sm leading-tight group-hover:text-[var(--brand)] transition-colors">{f.name}</div>
+              <div class="font-mono text-xs text-muted-foreground mt-0.5">{f.shortForm}</div>
+              <div class="text-xs text-muted-foreground mt-1 truncate">{f.tagline}</div>
+              <div class="mt-2 text-[11px] uppercase tracking-widest font-semibold text-muted-foreground">
+                {meta?.label}
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- SEO content -->
+    <section
+      class="prose prose-invert max-w-none text-muted-foreground text-sm leading-relaxed pt-10 relative"
+    >
+      <h2 class="font-display font-semibold text-xl text-foreground mb-4">Why use an interactive formula visualizer?</h2>
+      <p>
+        Traditional formula learning involves memorising equations and plugging numbers into a calculator. Interactive visualizers add a crucial third dimension: intuition. When you drag a slider and watch a right triangle stretch, or see a parabola's roots jump as you change coefficients, the formula ceases to be an abstract symbol string — it becomes a living relationship between quantities.
+      </p>
+      <p class="mt-4">
+        {SITE_NAME} covers the most important formulas across five disciplines:
+        <strong class="text-foreground"> Mathematics</strong> (Pythagorean theorem, circle area, quadratic formula),
+        <strong class="text-foreground"> Physics</strong> (E=mc², F=ma, kinetic energy, wave equation),
+        <strong class="text-foreground"> Finance</strong> (compound interest),
+        <strong class="text-foreground"> Chemistry</strong> (ideal gas law), and
+        <strong class="text-foreground"> Engineering</strong> (Ohm's law).
+        Each visualizer includes a step-by-step guide, five worked examples with real-world context, and an FAQ.
+      </p>
+      <p class="mt-4">
+        All tools are free, run entirely in the browser with no sign-up, and are optimised for both desktop and mobile. The 3D visualizers (Ideal Gas Law, 3D Pythagorean Theorem, Sphere Volume) use WebGL for silky-smooth interactive scenes, while 2D tools use SVG and Canvas for maximum performance on low-end devices.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

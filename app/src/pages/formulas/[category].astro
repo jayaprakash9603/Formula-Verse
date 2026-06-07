@@ -1,0 +1,76 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/icons/Icon.astro";
+import { getLiveByCategory } from "@/lib/formulas";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
+
+export function getStaticPaths() {
+  return ["math", "physics", "finance", "chemistry", "engineering"].map((cat) => ({
+    params: { category: cat },
+  }));
+}
+
+const { category } = Astro.params;
+const formulas = getLiveByCategory(category);
+
+const META: Record<string, { label: string; icon: string; desc: string }> = {
+  math:        { label: "Mathematics", icon: "calculator",    desc: "Explore geometry, algebra, and number theory formulas with interactive animations." },
+  physics:     { label: "Physics",     icon: "zap",           desc: "Visualise Newton's laws, energy equations, and wave mechanics in real time." },
+  finance:     { label: "Finance",     icon: "trending-up",   desc: "Understand compound interest and financial growth with animated charts." },
+  chemistry:   { label: "Chemistry",   icon: "flask-conical", desc: "Explore gas laws and molecular interactions with 3D animated visualizers." },
+  engineering: { label: "Engineering", icon: "settings",      desc: "Learn Ohm's Law and circuit fundamentals with interactive circuit diagrams." },
+};
+
+const meta = META[category];
+---
+<BaseLayout
+  title={`${meta.label} Formula Visualizers — ${SITE_NAME}`}
+  description={meta.desc}
+  canonical={`${SITE_URL}/formulas/${category}`}
+>
+  <div class="w-full page-wrap py-16">
+    <div class="mb-12 max-w-2xl">
+      <a href="/formulas" class="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        All formulas
+      </a>
+      <div class="flex items-center gap-4 mt-5">
+        <div
+          class="flex h-12 w-12 items-center justify-center rounded-2xl shrink-0"
+          style="background: var(--muted); color: var(--foreground);"
+        >
+          <Icon name={meta.icon} size={22} />
+        </div>
+        <h1 class="font-display font-bold text-3xl sm:text-4xl tracking-tight">
+          {meta.label} visualizers
+        </h1>
+      </div>
+      <p class="text-muted-foreground mt-4">{meta.desc}</p>
+    </div>
+
+    {formulas.length === 0 ? (
+      <p class="text-muted-foreground text-center py-20">No live formulas in this category yet. Check back soon!</p>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {formulas.map((f) => (
+          <a
+            href={`/tools/${f.slug}`}
+            class="group neu-raised rounded-2xl bg-card p-6 formula-card-hover"
+          >
+            <div class="text-2xl mb-3">{f.emoji}</div>
+            <div class="font-display font-semibold mb-1 group-hover:text-[var(--brand)] transition-colors">{f.name}</div>
+            <div class="font-mono text-xs text-muted-foreground mb-2">{f.shortForm}</div>
+            <div class="text-xs text-muted-foreground leading-relaxed">{f.tagline}</div>
+            <div class="mt-4 flex gap-2">
+              <span
+                class="text-[10px] uppercase tracking-widest font-semibold neu-flat rounded-full px-2.5 py-1 capitalize text-muted-foreground"
+              >
+                {f.difficulty}
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
