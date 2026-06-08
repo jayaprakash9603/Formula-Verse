@@ -2,5 +2,12 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "quickcalci-formulas",
   "compatibility_date": "2026-04-21",
-  "pages_build_output_dir": "dist"
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    // Astro is multi-page, so serve a real 404 page for unknown routes.
+    "not_found_handling": "404-page",
+    // /foo serves 200; /foo/ redirects to /foo.
+    "html_handling": "drop-trailing-slash"
+  }
 }

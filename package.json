@@ -17,7 +17,7 @@
     "validate:catalog": "node --import tsx/esm scripts/validate-catalog.mjs",
     "typecheck": "astro check && tsc --noEmit",
     "test": "vitest run",
-    "deploy": "wrangler pages deploy dist --project-name=quickcalci-formulas"
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
