@@ -2,15 +2,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "quickcalci-formulas",
   "compatibility_date": "2026-04-21",
-  "pages_build_output_dir": "dist",
   "assets": {
     "directory": "./dist",
     // Return a proper 404 for missing pages (Astro is MPA, not SPA).
     "not_found_handling": "404-page",
     // Drop trailing slash: /foo returns 200, /foo/ 301s to /foo.
     "html_handling": "drop-trailing-slash"
-  },
-  "vars": {
-    "SITE_URL": "https://formulas.quickcalci.com"
   }
 }
