@@ -204,15 +204,15 @@ export default function FormulaVisualizerEngine({ slug }: Props) {
             <Tabs defaultValue="visualize" className="w-full">
 
               <TabsList className="rounded-none px-2 pt-2">
-                <TabsTrigger value="calculator" className="gap-2 rounded-none py-3.5">
+                <TabsTrigger value="calculator" className="neu-tab-active gap-2 rounded-none py-3.5">
                   <Calculator className="h-3.5 w-3.5 shrink-0" />
                   <span>Calculator</span>
                 </TabsTrigger>
-                <TabsTrigger value="visualize" className="gap-2 rounded-none py-3.5">
+                <TabsTrigger value="visualize" className="neu-tab-active gap-2 rounded-none py-3.5">
                   <Eye className="h-3.5 w-3.5 shrink-0" />
                   <span>Visualize</span>
                 </TabsTrigger>
-                <TabsTrigger value="realworld" className="gap-2 rounded-none py-3.5">
+                <TabsTrigger value="realworld" className="neu-tab-active gap-2 rounded-none py-3.5">
                   <Globe className="h-3.5 w-3.5 shrink-0" />
                   <span>Real World</span>
                 </TabsTrigger>
@@ -235,7 +235,7 @@ export default function FormulaVisualizerEngine({ slug }: Props) {
                       >
                         {v.symbol}
                       </span>
-                      <span className="text-xs text-muted-foreground flex-1 truncate">{v.label}</span>
+                      <span className="text-xs text-muted-foreground flex-1 truncate">{v.name}</span>
                       <span className="font-mono text-sm tabular-nums font-medium">
                         {values[v.id]}{v.unit ? <span className="text-muted-foreground text-xs ml-0.5">{v.unit}</span> : null}
                       </span>
@@ -251,7 +251,7 @@ export default function FormulaVisualizerEngine({ slug }: Props) {
                       <span className="font-mono font-bold text-sm text-primary w-5 shrink-0">
                         {o.symbol}
                       </span>
-                      <span className="text-xs text-muted-foreground flex-1 truncate">{o.label}</span>
+                      <span className="text-xs text-muted-foreground flex-1 truncate">{o.name}</span>
                       <span className="font-mono text-sm tabular-nums font-bold text-primary">
                         {String(results[o.id])}{o.unit ? <span className="text-primary/70 text-xs ml-0.5">{o.unit}</span> : null}
                       </span>

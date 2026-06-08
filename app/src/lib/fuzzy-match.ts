@@ -1,59 +1,117 @@
 export interface FuzzyResult {
   score: number;
   indices: number[];
-  type: "exact" | "words" | "subsequence";
+  type: "exact" | "subsequence";
 }
 
 export function fuzzyMatch(text: string, query: string): FuzzyResult | null {
-  const t = text.toLowerCase();
-  const q = query.toLowerCase().trim();
+  const t = text;
+  const q = query.trim();
   if (!q) return null;
 
-  const exactIdx = t.indexOf(q);
-  if (exactIdx !== -1) {
-    const indices = Array.from({ length: q.length }, (_, i) => exactIdx + i);
-    return { score: 1000 - exactIdx, indices, type: "exact" };
-  }
+  const tLower = t.toLowerCase();
+  const qLower = q.toLowerCase();
 
-  const queryWords = q.split(/\s+/).filter(Boolean);
-  if (queryWords.length > 1) {
-    const allIndices: number[] = [];
-    let searchFrom = 0;
-    let allFound = true;
-    for (const word of queryWords) {
-      const wordIdx = t.indexOf(word, searchFrom);
-      if (wordIdx === -1) {
-        allFound = false;
+  // Fast-path for exact substring matches
+  const exactIdx = tLower.indexOf(qLower);
+  if (exactIdx !== -1) {
+    // Prefer matching on a word boundary if possible
+    let bestExactIdx = exactIdx;
+    let curr = exactIdx;
+    while (curr !== -1) {
+      const isWordStart = curr === 0 || /[\s\-_/]/.test(t[curr - 1]);
+      if (isWordStart) {
+        bestExactIdx = curr;
         break;
       }
-      for (let i = 0; i < word.length; i++) allIndices.push(wordIdx + i);
-      searchFrom = wordIdx + word.length;
+      curr = tLower.indexOf(qLower, curr + 1);
     }
-    if (allFound) {
-      return { score: 800 - allIndices[0], indices: allIndices, type: "words" };
-    }
+
+    const indices = Array.from({ length: q.length }, (_, i) => bestExactIdx + i);
+    // High base score for exact matches, slightly penalizing later matches
+    const score = 1000 - bestExactIdx;
+    return { score, indices, type: "exact" };
   }
 
-  let qi = 0;
-  const indices: number[] = [];
-  let lastMatchIdx = -1;
-  let gapPenalty = 0;
-  for (let i = 0; i < t.length && qi < q.length; i++) {
-    if (t[i] === q[qi]) {
-      indices.push(i);
-      if (lastMatchIdx !== -1) gapPenalty += i - lastMatchIdx - 1;
-      lastMatchIdx = i;
-      qi++;
+  // Memoization key: `${tIdx}_${qIdx}`
+  const memo = new Map<string, { score: number; indices: number[] } | null>();
+
+  function match(tIdx: number, qIdx: number): { score: number; indices: number[] } | null {
+    if (qIdx === q.length) {
+      return { score: 0, indices: [] };
     }
-  }
-  if (qi === q.length) {
-    let boundaryBonus = 0;
-    for (const idx of indices) {
-      if (idx === 0 || /[\s\-_]/.test(t[idx - 1])) boundaryBonus += 50;
+    if (tIdx === t.length) {
+      return null;
     }
-    const score = Math.max(1, 500 - gapPenalty * 5 + boundaryBonus);
-    return { score, indices, type: "subsequence" };
+
+    const key = `${tIdx}_${qIdx}`;
+    if (memo.has(key)) return memo.get(key)!;
+
+    let best: { score: number; indices: number[] } | null = null;
+
+    // Option 1: Skip the current character of text
+    const skipResult = match(tIdx + 1, qIdx);
+    if (skipResult) {
+      best = { ...skipResult };
+    }
+
+    // Option 2: Match the current character if they are equal
+    if (tLower[tIdx] === qLower[qIdx]) {
+      const matchResult = match(tIdx + 1, qIdx + 1);
+      if (matchResult) {
+        let charScore = 100;
+
+        // Word boundary bonus
+        const isStartOfWord = tIdx === 0 || /[\s\-_/]/.test(t[tIdx - 1]);
+        if (isStartOfWord) {
+          charScore += 120;
+        }
+
+        // CamelCase bonus (uppercase following lowercase/number)
+        const isCamel = tIdx > 0 && /[a-z0-9]/.test(t[tIdx - 1]) && /[A-Z]/.test(t[tIdx]);
+        if (isCamel) {
+          charScore += 80;
+        }
+
+        // Check if consecutive to previous matched character
+        if (matchResult.indices.length > 0) {
+          const nextMatchedIdx = matchResult.indices[0];
+          if (nextMatchedIdx === tIdx + 1) {
+            charScore += 100; // Consecutive bonus
+          } else {
+            // Gap penalty
+            const gap = nextMatchedIdx - tIdx - 1;
+            charScore -= Math.min(80, gap * 10);
+          }
+        }
+
+        const totalScore = charScore + matchResult.score;
+        if (best === null || totalScore > best.score) {
+          best = {
+            score: totalScore,
+            indices: [tIdx, ...matchResult.indices],
+          };
+        }
+      }
+    }
+
+    memo.set(key, best);
+    return best;
   }
 
-  return null;
+  const result = match(0, 0);
+  if (!result) return null;
+
+  // Final adjustments to subsequence match score
+  let finalScore = result.score;
+  if (result.indices[0] === 0) {
+    finalScore += 50; // Start of string bonus
+  }
+  finalScore -= text.length * 0.5; // Slight length penalty
+
+  return {
+    score: finalScore,
+    indices: result.indices,
+    type: "subsequence",
+  };
 }

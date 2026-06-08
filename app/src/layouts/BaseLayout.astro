@@ -100,8 +100,10 @@ const canonicalUrl = canonical ?? `${SITE_URL}${Astro.url.pathname}`;
     <slot name="head" />
   </head>
   <body class="min-h-screen bg-background text-foreground">
-    <!-- transition:persist keeps the header mounted across navigations (no flicker) -->
-    <div transition:persist="site-header">
+    <!-- transition:persist keeps the header mounted across navigations (no flicker).
+         The sticky context lives on this wrapper (a direct child of body) so the
+         header stays pinned for the full page rather than only its own height. -->
+    <div transition:persist="site-header" class="sticky top-0 z-50">
       <SiteHeader />
     </div>
 

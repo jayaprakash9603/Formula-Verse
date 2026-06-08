@@ -2,7 +2,7 @@ import { FORMULA_REGISTRY, FORMULA_SLUGS_LIVE } from "@/engines/formula-visualiz
 import { fuzzyMatch } from "@/lib/fuzzy-match";
 
 /* Single brand teal — monochrome palette, no per-category colors */
-const BRAND_TEAL = "#2a9d8f";
+const BRAND_TEAL = "#006666";
 
 const CATEGORY_LABELS: Record<string, string> = {
   math: "Math",
@@ -26,13 +26,13 @@ export interface SearchItem {
 export interface ScoredItem extends SearchItem {
   score: number;
   matchIndices: number[];
+  subIndices?: number[];
 }
 
 let _cachedIndex: SearchItem[] | null = null;
 
 function buildIndex(): SearchItem[] {
   const items: SearchItem[] = [];
-
   const categoryCounts: Record<string, number> = {};
 
   for (const slug of FORMULA_SLUGS_LIVE) {
@@ -84,7 +84,6 @@ function getIndex(): SearchItem[] {
 }
 
 const MAX_RESULTS = 20;
-const MAX_CANDIDATES = 50;
 
 export function searchItems(query: string, limit = MAX_RESULTS): ScoredItem[] {
   const q = query.trim();
@@ -93,33 +92,52 @@ export function searchItems(query: string, limit = MAX_RESULTS): ScoredItem[] {
   const tokens = qLower.split(/\s+/).filter(Boolean);
   const index = getIndex();
 
-  const candidates = index.filter((item) => {
-    if (item.labelLower.includes(qLower)) return true;
-    if (item.searchTextLower.includes(qLower)) return true;
-    return tokens.every((t) => item.searchTextLower.includes(t));
-  });
-
-  const source = candidates.length > 0 ? candidates.slice(0, MAX_CANDIDATES) : index;
-
-  return source
+  return index
     .map((item): ScoredItem | null => {
       const labelMatch = fuzzyMatch(item.label, q);
-      const textMatch = fuzzyMatch(item.searchTextLower, q);
-      const best = [labelMatch, textMatch]
-        .filter((r): r is NonNullable<typeof r> => r !== null)
-        .sort((a, b) => b.score - a.score)[0];
-      if (!best) return null;
+      const subMatch = fuzzyMatch(item.sub, q);
+
+      // Evaluate full-text keyword matching (exact or token-based, NOT subsequence)
+      let fullTextScore: number | null = null;
+      if (item.searchTextLower.includes(qLower)) {
+        fullTextScore = 200; // Direct substring match in prose
+      } else if (tokens.length > 0 && tokens.every((token) => item.searchTextLower.includes(token))) {
+        fullTextScore = 100; // All search tokens matched in prose
+      }
+
+      // If nothing matched, filter out
+      if (!labelMatch && !subMatch && fullTextScore === null) {
+        return null;
+      }
+
+      // Calculate score and select matching indices
+      let score = 0;
+      let matchIndices: number[] = [];
+      let subIndices: number[] = [];
+
+      if (labelMatch) {
+        score = labelMatch.score;
+        matchIndices = labelMatch.indices;
+        if (subMatch) {
+          subIndices = subMatch.indices;
+        }
+      } else if (subMatch) {
+        score = subMatch.score - 150; // Tagline match is lower priority than title match
+        subIndices = subMatch.indices;
+      } else if (fullTextScore !== null) {
+        score = fullTextScore;
+      }
+
       const typeBonus = item.type === "formula" ? 50 : 0;
+
       return {
         ...item,
-        score: best.score + typeBonus,
-        matchIndices: labelMatch?.indices ?? best.indices,
+        score: score + typeBonus,
+        matchIndices,
+        subIndices,
       };
     })
     .filter((x): x is ScoredItem => x !== null)
-    .sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score;
-      return a.type === "formula" ? -1 : 1;
-    })
+    .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 }

@@ -80,19 +80,33 @@ export default defineConfig({
       rollupOptions: {
         output: {
           manualChunks(id) {
+            // Vite's dynamic-import preload helper is a shared module. Pin it to
+            // the always-loaded, side-effect-free react-vendor chunk so it never
+            // gets hoisted into a side-effectful vendor chunk (e.g. r3f-vendor,
+            // whose react-reconciler crashes on React 19 at evaluation time).
+            if (id.includes("vite/preload-helper")) return "react-vendor";
             if (
               id.includes("node_modules/react-dom") ||
               id.includes("node_modules/react/")
             ) {
               return "react-vendor";
             }
+            // React-three stack (fiber/drei + their React-internal deps such as
+            // react-reconciler) MUST stay separate from vanilla three so that
+            // importing plain three never evaluates the reconciler — which reads
+            // React internals removed in React 19 and would otherwise crash.
             if (
-              id.includes("node_modules/three") ||
-              id.includes("@react-three/fiber") ||
-              id.includes("@react-three/drei")
+              id.includes("node_modules/@react-three/") ||
+              id.includes("node_modules/react-reconciler") ||
+              id.includes("node_modules/its-fine") ||
+              id.includes("node_modules/zustand") ||
+              id.includes("node_modules/suspend-react") ||
+              id.includes("node_modules/react-use-measure") ||
+              id.includes("node_modules/three-stdlib")
             ) {
-              return "three-vendor";
+              return "r3f-vendor";
             }
+            if (id.includes("node_modules/three")) return "three-vendor";
             if (id.includes("node_modules/lucide-react")) return "icons";
             if (id.includes("node_modules/roughjs")) return "roughjs";
           },

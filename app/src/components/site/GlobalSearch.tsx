@@ -50,7 +50,7 @@ function ResultRow({
         </span>
         {item.sub && (
           <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-            {item.sub}
+            <HighlightText text={item.sub} indices={item.subIndices ?? []} />
           </span>
         )}
       </div>

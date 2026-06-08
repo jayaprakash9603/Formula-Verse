@@ -322,6 +322,9 @@
 
 .page-wrap {
   width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
   padding-left: clamp(1rem, 2.5vw, 3rem);
   padding-right: clamp(1rem, 2.5vw, 3rem);
 }
@@ -388,6 +391,14 @@
 }
 .fv-search-scroll::-webkit-scrollbar-thumb:hover {
   background: var(--neu-light);
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 .hero-grid-bg {
