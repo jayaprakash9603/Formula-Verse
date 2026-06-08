@@ -23,6 +23,9 @@ export default defineConfig({
   site: "https://formulaverse.tools",
   output: "static",
   trailingSlash: "ignore",
+  devToolbar: {
+    enabled: false,
+  },
   build: {
     inlineStylesheets: "auto",
     assets: "_astro",
@@ -39,7 +42,7 @@ export default defineConfig({
       lastmod: new Date(),
       filter: (page) => {
         if (page.includes("/404")) return false;
-        const m = page.match(/\/tools\/([^/]+)(?:\/(?:guide|examples|faq))?\/?$/);
+        const m = page.match(/\/tools\/([^/]+)(?:\/(?:explain|guide|examples|faq))?\/?$/);
         if (m) return LIVE_SLUGS.includes(m[1]);
         return true;
       },

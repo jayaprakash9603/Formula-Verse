@@ -13,7 +13,7 @@
     "preview": "astro preview",
     "og": "node --import tsx/esm scripts/generate-formula-og.mjs",
     "sitemap": "node scripts/generate-sitemap.mjs",
-    "check:seo": "node scripts/check-seo.mjs",
+    "check:seo": "node --import tsx/esm scripts/check-seo.mjs",
     "validate:catalog": "node --import tsx/esm scripts/validate-catalog.mjs",
     "typecheck": "astro check && tsc --noEmit",
     "test": "vitest run",

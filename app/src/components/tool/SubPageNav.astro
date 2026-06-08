@@ -1,12 +1,13 @@
 ---
 interface Props {
   slug: string;
-  current: "index" | "guide" | "examples" | "faq";
+  current: "index" | "explain" | "guide" | "examples" | "faq";
 }
 const { slug, current } = Astro.props;
 const base = `/tools/${slug}`;
 const links = [
-  { key: "index" as const, label: "Tool", href: base },
+  { key: "index" as const, label: "Visualizer", href: base },
+  { key: "explain" as const, label: "Explain", href: `${base}/explain` },
   { key: "guide" as const, label: "Guide", href: `${base}/guide` },
   { key: "examples" as const, label: "Examples", href: `${base}/examples` },
   { key: "faq" as const, label: "FAQ", href: `${base}/faq` },

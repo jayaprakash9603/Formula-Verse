@@ -16,21 +16,31 @@ import type { FormulaVisualizerConfig } from "@/engines/formula-visualizer/types
 
 interface Props {
   config: FormulaVisualizerConfig;
-  subPage: "index" | "guide" | "examples" | "faq";
+  subPage: "index" | "explain" | "guide" | "examples" | "faq";
+  title?: string;
 }
 
-const { config, subPage } = Astro.props;
+const { config, subPage, title } = Astro.props;
 
 const baseUrl = `${SITE_URL}/tools/${config.slug}`;
 const pageUrl = subPage === "index" ? baseUrl : `${baseUrl}/${subPage}`;
+
+const subPageLabels: Record<string, string> = {
+  explain: "Explain",
+  guide: "Guide",
+  examples: "Examples",
+  faq: "FAQ",
+};
 
 const crumbs = [
   { label: "Home", href: "/" },
   { label: "Formulas", href: "/formulas" },
   { label: config.category.charAt(0).toUpperCase() + config.category.slice(1), href: `/formulas/${config.category}` },
   { label: config.name, ...(subPage !== "index" ? { href: baseUrl } : {}) },
-  ...(subPage !== "index" ? [{ label: subPage.charAt(0).toUpperCase() + subPage.slice(1) }] : []),
+  ...(subPage !== "index" ? [{ label: subPageLabels[subPage] ?? subPage }] : []),
 ];
+
+const pageTitle = title ?? config.seo.title;
 
 const jsonLdBlocks = [
   buildBreadcrumbJsonLd(crumbs.map((c) => ({ name: c.label, url: (c as { href?: string }).href ? `${SITE_URL}${(c as { href: string }).href}` : undefined }))),
@@ -49,14 +59,25 @@ const sidebarFormulas = getLiveFormulas().map((f) => ({
 }));
 ---
 <BaseLayout
-  title={config.seo.title}
+  title={pageTitle}
   description={config.seo.description}
   ogImage={`/og/${config.slug}.png`}
   canonical={pageUrl}
+  hideFooter={subPage === "index"}
 >
   <Fragment slot="head">
     {jsonLdBlocks.map((block) => <JsonLd data={block} />)}
+    <slot name="head" />
   </Fragment>
+
+  <div class="tool-page tool-page--sub">
+  <!-- Breadcrumbs + sub-page nav — full width, directly below site header -->
+  <div class="w-full px-4 sm:px-6 tool-topbar neu-flat border-b border-[var(--hairline)]">
+    <Breadcrumbs items={crumbs} />
+    <div class="pb-2">
+      <SubPageNav slug={config.slug} current={subPage} />
+    </div>
+  </div>
 
   <!-- Full-width flex wrapper: sidebar + main -->
   <div class="flex w-full tool-layout-wrap">
@@ -70,33 +91,30 @@ const sidebarFormulas = getLiveFormulas().map((f) => ({
 
     <!-- Main content area -->
     <div class="flex-1 min-w-0 overflow-x-hidden flex flex-col">
-
-      <!-- Breadcrumbs + sub-page nav -->
-      <div class="w-full px-4 sm:px-6 py-3 tool-topbar neu-flat">
-        <Breadcrumbs items={crumbs} />
-        {subPage !== "index" && (
-          <div class="mt-2">
-            <SubPageNav slug={config.slug} current={subPage} />
-          </div>
-        )}
-      </div>
-
-      <!-- Page slot (FormulaVisualizerEngine or guide/examples/faq content) -->
       <div class="flex-1">
         <slot />
       </div>
     </div>
   </div>
+  </div>
 </BaseLayout>
 
 <style>
+  .tool-page {
+    --fv-header-h: 3.5rem;
+    --fv-topbar-h: 2.25rem;
+    --fv-stack-top: calc(var(--fv-header-h) + var(--fv-topbar-h));
+  }
+  .tool-page--sub {
+    --fv-topbar-h: 4.5rem;
+  }
   .tool-layout-wrap {
-    min-height: calc(100vh - 56px);
+    min-height: calc(100vh - var(--fv-stack-top));
   }
   .tool-topbar {
     background: var(--background);
     position: sticky;
-    top: 56px;
+    top: var(--fv-header-h);
     z-index: 20;
   }
 </style>

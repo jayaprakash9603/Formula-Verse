@@ -4,10 +4,13 @@ import { OrbitControls, Text, Environment } from "@react-three/drei";
 import * as THREE from "three";
 import type { FormulaVisualizerConfig } from "./types";
 
+const PythagoreanTheoremScene = React.lazy(() => import("./PythagoreanTheoremScene"));
+
 interface SceneProps {
   config: FormulaVisualizerConfig;
   values: Record<string, number>;
-  height: number;
+  height?: number;
+  fillContainer?: boolean;
 }
 
 function IdealGasScene({ values }: { values: Record<string, number> }) {
@@ -165,22 +168,76 @@ function SphereVolumeScene({ values }: { values: Record<string, number> }) {
   );
 }
 
-export default function FormulaThreeScene({ config, values, height }: SceneProps) {
-  return (
-    <div
-      className="w-full rounded-lg overflow-hidden border border-border"
-      style={{ height, background: "var(--formula-viz-bg)" }}
-    >
-      <Canvas camera={{ position: [3, 2, 5], fov: 45 }}>
+function SceneContent({ config, values }: { config: FormulaVisualizerConfig; values: Record<string, number> }) {
+  if (config.slug === "ideal-gas-law-visualizer") {
+    return (
+      <>
         <ambientLight intensity={0.6} />
         <pointLight position={[10, 10, 10]} intensity={1} />
+        <IdealGasScene values={values} />
+        <OrbitControls enableZoom />
+      </>
+    );
+  }
+  if (config.slug === "pythagorean-theorem-visualizer") {
+    return (
+      <React.Suspense fallback={null}>
+        <PythagoreanTheoremScene values={values} />
+      </React.Suspense>
+    );
+  }
+  if (config.slug === "pythagorean-3d-theorem") {
+    return (
+      <>
+        <ambientLight intensity={0.6} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        <Pythagoras3DScene values={values} />
+      </>
+    );
+  }
+  if (config.slug === "sphere-volume-visualizer") {
+    return (
+      <>
+        <ambientLight intensity={0.6} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        <SphereVolumeScene values={values} />
+      </>
+    );
+  }
+  return <OrbitControls autoRotate={false} enableZoom />;
+}
+
+export default function FormulaThreeScene({ config, values, height, fillContainer }: SceneProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [measuredH, setMeasuredH] = React.useState(height ?? 340);
+
+  React.useEffect(() => {
+    if (!fillContainer || !containerRef.current) return;
+    const ro = new ResizeObserver((entries) => {
+      const h = entries[0].contentRect.height;
+      if (h > 0) setMeasuredH(Math.round(h));
+    });
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, [fillContainer]);
+
+  const resolvedHeight = fillContainer ? measuredH : (height ?? 340);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`w-full overflow-hidden${fillContainer ? " h-full min-h-[280px]" : " rounded-lg border border-border"}`}
+      style={{ height: fillContainer ? "100%" : resolvedHeight, background: "var(--formula-viz-bg)" }}
+    >
+      <Canvas
+        camera={{
+          position: config.slug === "pythagorean-theorem-visualizer" ? [0, 0, 4.8] : [3, 2, 5],
+          fov: 42,
+        }}
+        style={{ height: resolvedHeight }}
+      >
         <Environment preset="city" />
-        {config.slug === "ideal-gas-law-visualizer" && <IdealGasScene values={values} />}
-        {config.slug === "pythagorean-3d-theorem" && <Pythagoras3DScene values={values} />}
-        {config.slug === "sphere-volume-visualizer" && <SphereVolumeScene values={values} />}
-        {config.slug !== "pythagorean-3d-theorem" && (
-          <OrbitControls autoRotate={false} enableZoom={true} />
-        )}
+        <SceneContent config={config} values={values} />
       </Canvas>
     </div>
   );

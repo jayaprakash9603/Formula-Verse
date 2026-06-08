@@ -12,6 +12,7 @@ interface Props {
   ogImage?: string;
   canonical?: string;
   noIndex?: boolean;
+  hideFooter?: boolean;
 }
 
 const {
@@ -20,6 +21,7 @@ const {
   ogImage = "/og/default.png",
   canonical,
   noIndex = false,
+  hideFooter = false,
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Interactive Formula Visualizer`;
@@ -33,27 +35,34 @@ const canonicalUrl = canonical ?? `${SITE_URL}${Astro.url.pathname}`;
     <link rel="preconnect" href="https://fonts.bunny.net" />
     <link href="https://fonts.bunny.net/css?family=space-mono:400,700" rel="stylesheet" />
 
-    <!--
-      Theme init — must run before first paint AND after every View Transition
-      swap to avoid flash of wrong theme. `is:inline` ensures it runs on the
-      initial load; the astro:after-swap listener handles subsequent navigations.
-    -->
+    <style is:inline>
+      html, body { background-color: #E7E5E4; color: #1E2938; }
+      html.dark, html.dark body { background-color: #2b2f36; color: #e8eaed; }
+    </style>
     <script is:inline>
-      (function applyTheme() {
-        const stored = localStorage.getItem("fv-theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const isDark = stored === "dark" || (!stored && prefersDark) || (!stored && !window.matchMedia("(prefers-color-scheme: light)").matches);
-        document.documentElement.classList.toggle("dark", isDark);
-        document.documentElement.classList.toggle("light", !isDark);
+      (function () {
+        var KEY = "fv-theme";
+        function resolve(stored, prefersDark, prefersLight) {
+          if (stored === "dark") return true;
+          if (stored === "light") return false;
+          if (prefersDark) return true;
+          if (prefersLight) return false;
+          return true;
+        }
+        function apply(doc) {
+          var stored = localStorage.getItem(KEY);
+          var prefersDark = doc.defaultView.matchMedia("(prefers-color-scheme: dark)").matches;
+          var prefersLight = doc.defaultView.matchMedia("(prefers-color-scheme: light)").matches;
+          var isDark = resolve(stored, prefersDark, prefersLight);
+          doc.documentElement.classList.toggle("dark", isDark);
+          doc.documentElement.classList.toggle("light", !isDark);
+          var meta = doc.getElementById("theme-color-meta");
+          if (meta) meta.setAttribute("content", isDark ? "#2b2f36" : "#E7E5E4");
+        }
+        apply(document);
+        document.addEventListener("astro:before-swap", function (e) { apply(e.newDocument); });
+        document.addEventListener("astro:after-swap", function () { apply(document); });
       })();
-      // Re-apply theme after every client-side navigation swap
-      document.addEventListener("astro:after-swap", function () {
-        const stored = localStorage.getItem("fv-theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const isDark = stored === "dark" || (!stored && prefersDark) || (!stored && !window.matchMedia("(prefers-color-scheme: light)").matches);
-        document.documentElement.classList.toggle("dark", isDark);
-        document.documentElement.classList.toggle("light", !isDark);
-      });
     </script>
 
     <title>{pageTitle}</title>
@@ -111,24 +120,11 @@ const canonicalUrl = canonical ?? `${SITE_URL}${Astro.url.pathname}`;
       <slot />
     </main>
 
-    <div transition:persist="site-footer">
-      <SiteFooter />
-    </div>
+    {!hideFooter && (
+      <div transition:persist="site-footer">
+        <SiteFooter />
+      </div>
+    )}
 
-    <!-- Sync theme-color meta tag -->
-    <script is:inline>
-      (function () {
-        function updateThemeColor() {
-          const isDark = document.documentElement.classList.contains("dark");
-          const meta = document.getElementById("theme-color-meta");
-          if (meta) meta.setAttribute("content", isDark ? "#2b2f36" : "#E7E5E4");
-        }
-        updateThemeColor();
-        new MutationObserver(updateThemeColor).observe(document.documentElement, {
-          attributes: true, attributeFilter: ["class"],
-        });
-        document.addEventListener("astro:after-swap", updateThemeColor);
-      })();
-    </script>
   </body>
 </html>

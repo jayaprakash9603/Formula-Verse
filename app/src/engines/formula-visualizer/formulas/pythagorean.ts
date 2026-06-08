@@ -43,7 +43,7 @@ const pythagorean: FormulaVisualizerConfig = {
     { id: "c", symbol: "c", name: "Hypotenuse", unit: "units" },
   ],
   compute: (v) => ({ c: Math.sqrt(v.a ** 2 + v.b ** 2).toFixed(4) }),
-  vizSurface: "svg",
+  vizSurface: "three",
   renderSVG: (vars, w, h) => {
     const { a, b } = vars;
     const c = Math.sqrt(a ** 2 + b ** 2);

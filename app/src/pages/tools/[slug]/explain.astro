@@ -1,0 +1,43 @@
+---
+import ToolLayout from "@/layouts/ToolLayout.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import FormulaExplanationPage from "@/components/formula-explanation/FormulaExplanationPage";
+import PythagoreanTheoremInteractive from "@/components/pythagorean/PythagoreanTheoremInteractive";
+import { FORMULA_SLUGS_LIVE, getBySlug } from "@/lib/formulas";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+
+export function getStaticPaths() {
+  return FORMULA_SLUGS_LIVE.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const config = getBySlug(slug)!;
+const isPythagorean = slug === "pythagorean-theorem-visualizer";
+const pageUrl = `${SITE_URL}/tools/${slug}/explain`;
+
+const learningJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  name: `${config.name} — Explanation & Visual Guide`,
+  description: config.seo.description,
+  url: pageUrl,
+  educationalLevel: config.difficulty.charAt(0).toUpperCase() + config.difficulty.slice(1),
+  learningResourceType: "Interactive visualization",
+  teaches: config.shortForm,
+  provider: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+};
+---
+<ToolLayout
+  title={`${config.name} — Explanation & Guide`}
+  config={config}
+  subPage="explain"
+>
+  <Fragment slot="head">
+    <JsonLd data={learningJsonLd} />
+  </Fragment>
+  {isPythagorean ? (
+    <PythagoreanTheoremInteractive client:only="react" />
+  ) : (
+    <FormulaExplanationPage slug={slug} client:load />
+  )}
+</ToolLayout>

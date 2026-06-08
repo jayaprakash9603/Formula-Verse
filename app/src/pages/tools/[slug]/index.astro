@@ -1,9 +1,7 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
 import ToolLayout from "@/layouts/ToolLayout.astro";
 import JsonLd from "@/components/seo/JsonLd.astro";
 import FormulaVisualizerEngine from "@/engines/formula-visualizer/FormulaVisualizerEngine";
-import PythagoreanTheoremInteractive from "@/components/pythagorean/PythagoreanTheoremInteractive";
 import { FORMULA_SLUGS_LIVE, getBySlug } from "@/lib/formulas";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -13,10 +11,9 @@ export function getStaticPaths() {
 
 const { slug } = Astro.params;
 const config = getBySlug(slug)!;
-const isPythagorean = slug === "pythagorean-theorem-visualizer";
 const pageUrl = `${SITE_URL}/tools/${slug}`;
 
-const learningJsonLd = isPythagorean ? {
+const learningJsonLd = slug === "pythagorean-theorem-visualizer" ? {
   "@context": "https://schema.org",
   "@type": "LearningResource",
   name: "The Pythagorean Theorem — Interactive Visual Guide",
@@ -28,18 +25,11 @@ const learningJsonLd = isPythagorean ? {
   provider: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
 } : null;
 ---
-{isPythagorean ? (
-  <BaseLayout
-    title={config.seo.title}
-    description={config.seo.description}
-    ogImage={`/og/${config.slug}.png`}
-    canonical={pageUrl}
-  >
-    {learningJsonLd && <JsonLd data={learningJsonLd} />}
-    <PythagoreanTheoremInteractive client:only="react" />
-  </BaseLayout>
-) : (
-  <ToolLayout config={config} subPage="index">
-    <FormulaVisualizerEngine slug={slug} client:only="react" />
-  </ToolLayout>
-)}
+<ToolLayout config={config} subPage="index">
+  {learningJsonLd && (
+    <Fragment slot="head">
+      <JsonLd data={learningJsonLd} />
+    </Fragment>
+  )}
+  <FormulaVisualizerEngine slug={slug} client:only="react" />
+</ToolLayout>

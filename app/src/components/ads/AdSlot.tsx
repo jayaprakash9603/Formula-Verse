@@ -36,14 +36,16 @@ export default function AdSlot({ placement, client, slotId, className = "" }: Ad
 
   React.useEffect(() => {
     const cb = () => setActive(true);
-    if ("requestIdleCallback" in window) {
-      const id = (window as unknown as { requestIdleCallback: (f: () => void) => number }).requestIdleCallback(cb);
-      return () => {
-        (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback?.(id);
-      };
+    const win = window as Window & {
+      requestIdleCallback?: (f: () => void) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (win.requestIdleCallback) {
+      const id = win.requestIdleCallback(cb);
+      return () => win.cancelIdleCallback?.(id);
     }
-    const id = window.setTimeout(cb, 1500);
-    return () => window.clearTimeout(id);
+    const id = setTimeout(cb, 1500);
+    return () => clearTimeout(id);
   }, []);
 
   React.useEffect(() => {

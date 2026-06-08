@@ -156,17 +156,26 @@ npx wrangler pages project create formulaverse
 npm run deploy
 ```
 
-Or connect the GitHub repository to Cloudflare Pages and set:
-- **Build command:** `npm run build`
-- **Build output directory:** `dist`
-- **Node version:** `22`
+### GitHub → Cloudflare Pages
+
+Connect `jayaprakash9603/Formula-Verse` in the Cloudflare dashboard:
+
+| Setting | Value |
+|---------|-------|
+| Root directory | `app` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node version | `22` |
+
+Or use the GitHub Actions workflow (`.github/workflows/cloudflare-pages.yml`) with `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets.
 
 ---
 
 ## SEO
 
-Each live formula generates 4 routes:
-- `/tools/<slug>` — SoftwareApplication + BreadcrumbList JSON-LD
+Each live formula generates 5 routes:
+- `/tools/<slug>` — visualizer + SoftwareApplication JSON-LD
+- `/tools/<slug>/explain` — full explanation page
 - `/tools/<slug>/guide` — HowTo JSON-LD
 - `/tools/<slug>/examples` — 5 worked examples
 - `/tools/<slug>/faq` — FAQPage JSON-LD

@@ -1,6 +1,5 @@
 ---
 import ToolLayout from "@/layouts/ToolLayout.astro";
-import SubPageNav from "@/components/tool/SubPageNav.astro";
 import { FORMULA_SLUGS_LIVE, getBySlug } from "@/lib/formulas";
 
 export function getStaticPaths() {
@@ -11,9 +10,7 @@ const { slug } = Astro.params;
 const config = getBySlug(slug)!;
 ---
 <ToolLayout config={config} subPage="faq">
-  <div class="w-full px-4 sm:px-6 pb-20">
-    <SubPageNav slug={config.slug} current="faq" />
-
+  <div class="mx-auto w-full max-w-[900px] px-4 sm:px-6 pb-20 pt-4 sm:pt-6">
     <h1 class="font-display font-bold text-3xl sm:text-4xl mb-4">
       {config.name} — FAQ
     </h1>

@@ -7,9 +7,10 @@ interface Props {
   outputs: FormulaOutputDef[];
   results: Record<string, number | string>;
   primaryId: string;
+  compact?: boolean;
 }
 
-export default function FormulaResultCard({ outputs, results, primaryId }: Props) {
+export default function FormulaResultCard({ outputs, results, primaryId, compact }: Props) {
   const [pulse, setPulse] = React.useState(false);
   const prevRef = React.useRef<string>("");
   const primaryVal = String(results[primaryId] ?? "—");
@@ -28,11 +29,14 @@ export default function FormulaResultCard({ outputs, results, primaryId }: Props
 
   return (
     <Card className={cn("bg-primary/5 transition-all duration-200", pulse && "animate-pulse-ring ring-2 ring-primary/50")}>
-      <CardContent className="p-4">
+      <CardContent className={cn("p-4", compact && "p-3")}>
         <div className="flex flex-col items-center gap-1">
           <span className="text-xs text-muted-foreground uppercase tracking-widest">{primary.name}</span>
           <div className="flex items-baseline gap-2">
-            <span className="font-mono text-4xl font-bold text-primary tabular-nums leading-none">
+            <span className={cn(
+              "font-mono font-bold text-primary tabular-nums leading-none",
+              compact ? "text-2xl lg:text-3xl" : "text-4xl",
+            )}>
               {primaryVal}
             </span>
             {primary.unit && (

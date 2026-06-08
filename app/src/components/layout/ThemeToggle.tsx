@@ -2,24 +2,24 @@ import * as React from "react";
 import { Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { neuVariants } from "@/lib/neu";
-
-const STORAGE_KEY = "fv-theme";
+import { THEME_STORAGE_KEY, applyFvTheme, resolveIsDark } from "@/lib/theme-init";
 
 function getIsDark(): boolean {
   if (typeof window === "undefined") return true;
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) return stored === "dark";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const stored = localStorage.getItem(THEME_STORAGE_KEY);
+  return resolveIsDark(
+    stored,
+    window.matchMedia("(prefers-color-scheme: dark)").matches,
+    window.matchMedia("(prefers-color-scheme: light)").matches,
+  );
 }
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = React.useState(getIsDark);
 
   React.useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle("dark", isDark);
-    root.classList.toggle("light", !isDark);
-    localStorage.setItem(STORAGE_KEY, isDark ? "dark" : "light");
+    localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
+    applyFvTheme();
   }, [isDark]);
 
   React.useEffect(() => {
