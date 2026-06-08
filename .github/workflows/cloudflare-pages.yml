@@ -16,9 +16,6 @@ jobs:
     permissions:
       contents: read
       deployments: write
-    defaults:
-      run:
-        working-directory: app
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,9 +23,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: app/.node-version
+          node-version-file: .node-version
           cache: npm
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
@@ -41,5 +38,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: app
           command: pages deploy dist --project-name=quickcalci-formulas

@@ -1,6 +1,6 @@
 ---
 description: Neumorphism design system for QuickCalci Formulas — all UI must use neu tokens and abstractions
-globs: app/src/**/*
+globs: src/**/*
 alwaysApply: false
 ---
 

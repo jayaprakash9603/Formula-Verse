@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-Disallow: /404
-Disallow: /_astro/
-
-Sitemap: https://formulas.quickcalci.com/sitemap-index.xml
