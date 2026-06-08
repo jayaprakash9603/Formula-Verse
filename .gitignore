@@ -8,3 +8,9 @@ dist/
 Thumbs.db
 .playwright-mcp/
 sphere-current.png
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
