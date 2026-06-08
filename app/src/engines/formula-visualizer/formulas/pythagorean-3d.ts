@@ -1,4 +1,4 @@
-import type { FormulaVisualizerConfig } from "../types";
+﻿import type { FormulaVisualizerConfig } from "../types";
 
 const pythagorean3d: FormulaVisualizerConfig = {
   slug: "pythagorean-3d-theorem",
@@ -80,7 +80,7 @@ const pythagorean3d: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["pythagorean-theorem-visualizer", "sphere-volume-visualizer"],
   seo: {
-    title: "3D Pythagorean Theorem a²+b²+c²=d² — FormulaVerse",
+    title: "3D Pythagorean Theorem a²+b²+c²=d² — QuickCalci Formulas",
     description:
       "Explore a²+b²+c²=d² with an interactive 3D rotating cuboid. See the space diagonal glow as you adjust width, depth, and height.",
   },

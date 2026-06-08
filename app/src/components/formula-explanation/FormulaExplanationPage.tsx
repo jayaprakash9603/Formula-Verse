@@ -10,7 +10,7 @@ interface Props {
 export default function FormulaExplanationPage({ slug }: Props) {
   const config = React.useMemo(() => {
     const resolved = getFormula(slug);
-    if (!resolved) throw new Error(`FormulaVerse: unknown formula slug "${slug}"`);
+    if (!resolved) throw new Error(`QuickCalci Formulas: unknown formula slug "${slug}"`);
     return resolved;
   }, [slug]);
 

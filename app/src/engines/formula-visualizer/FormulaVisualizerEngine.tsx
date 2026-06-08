@@ -56,7 +56,7 @@ function KatexDisplay({ latex, displayMode = false }: { latex: string; displayMo
 export default function FormulaVisualizerEngine({ slug }: Props) {
   const config = React.useMemo(() => {
     const resolved = getFormula(slug);
-    if (!resolved) throw new Error(`FormulaVerse: unknown formula slug "${slug}"`);
+    if (!resolved) throw new Error(`QuickCalci Formulas: unknown formula slug "${slug}"`);
     return resolved;
   }, [slug]);
 
@@ -108,11 +108,11 @@ export default function FormulaVisualizerEngine({ slug }: Props) {
   return (
     <>
       <Toaster />
-      <div className="formula-viz-root mx-auto w-full max-w-[1440px] px-4 sm:px-6 pt-2 lg:pt-3">
+      <div className="formula-viz-root w-full px-2 sm:px-3 pt-1.5">
         <div className="formula-viz-workspace">
           <header className="formula-viz-controls">
             <Card className="h-full overflow-hidden">
-              <div className="flex h-full flex-col p-3 sm:p-4">
+              <div className="flex h-full flex-col p-2.5 sm:p-3">
                 <div className="mb-2 flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
                     <span
@@ -169,8 +169,8 @@ export default function FormulaVisualizerEngine({ slug }: Props) {
             </div>
           </header>
 
-          <section className="formula-viz-stage-wrap neu-raised overflow-hidden rounded-2xl bg-card">
-            <header className="flex shrink-0 items-center justify-between gap-3 border-b border-[var(--hairline)] px-4 py-2.5 sm:px-5">
+          <section className="formula-viz-stage-wrap neu-raised overflow-hidden rounded-xl bg-card">
+            <header className="flex shrink-0 items-center justify-between gap-3 border-b border-[var(--hairline)] px-3 py-2 sm:px-4">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
@@ -195,7 +195,7 @@ export default function FormulaVisualizerEngine({ slug }: Props) {
           </section>
         </div>
 
-        <div className="flex flex-col gap-5 py-5 lg:py-7">
+        <div className="flex flex-col gap-4 py-4">
             <div className="neu-flat overflow-hidden rounded-2xl bg-card">
               <Tabs defaultValue="calculator" className="w-full">
                 <TabsList className="rounded-none px-2 pt-2">

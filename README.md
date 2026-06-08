@@ -1,8 +1,8 @@
-# FormulaVerse
+# QuickCalci Formulas
 
 Interactive formula visualizers for math, physics, finance, chemistry, and engineering.
 
-**Live site:** https://formulaverse.tools
+**Live site:** https://formulas.quickcalci.com
 
 ## Repository layout
 
@@ -39,7 +39,7 @@ npm run deploy
 
 1. Push this repo to GitHub.
 2. In [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
-3. Select `jayaprakash9603/Formula-Verse`.
+3. Select your repository.
 4. Configure:
 
 | Setting | Value |
@@ -50,16 +50,16 @@ npm run deploy
 | Build output directory | `dist` |
 | Node version | `22` |
 
-5. Deploy. Cloudflare reads `app/wrangler.jsonc` for asset handling.
+5. Add custom domain: `formulas.quickcalci.com`
 
 ### Option B — GitHub Actions
 
 The workflow in `.github/workflows/cloudflare-pages.yml` deploys on every push to `main`.
 
-Add these repository secrets in GitHub → **Settings** → **Secrets and variables** → **Actions**:
+Add these repository secrets:
 
-- `CLOUDFLARE_API_TOKEN` — token with **Cloudflare Pages Edit** permission
-- `CLOUDFLARE_ACCOUNT_ID` — from Cloudflare dashboard → **Workers & Pages** → right sidebar
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
 
 ## Documentation
 

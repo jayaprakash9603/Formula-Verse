@@ -45,11 +45,10 @@ const jsonLd = buildCollectionPageJsonLd(formulas, `${SITE_URL}/formulas`);
       {Object.entries(CATEGORY_META).map(([key, meta]) => (
         <a
           href={`/formulas/${key}`}
-          class="group flex flex-col items-start gap-3 neu-raised rounded-2xl bg-card p-5 transition-all formula-card-hover"
+          class="group category-card flex flex-col items-start gap-3 neu-raised rounded-2xl p-5 transition-all formula-card-hover"
         >
           <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl"
-            style="background: var(--muted); color: var(--foreground);"
+            class="category-card-icon neu-inset flex h-10 w-10 items-center justify-center rounded-xl"
           >
             <Icon name={meta.icon} size={18} />
           </div>

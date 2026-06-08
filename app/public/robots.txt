@@ -4,4 +4,4 @@ Allow: /
 Disallow: /404
 Disallow: /_astro/
 
-Sitemap: https://formulaverse.tools/sitemap-index.xml
+Sitemap: https://formulas.quickcalci.com/sitemap-index.xml

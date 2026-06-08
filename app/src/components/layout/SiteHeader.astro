@@ -2,6 +2,7 @@
 import ThemeToggle from "./ThemeToggle";
 import GlobalSearch from "@/components/site/GlobalSearch";
 import Icon from "@/components/icons/Icon.astro";
+import { SITE_NAME } from "@/lib/site";
 ---
 <header
   class="sticky top-0 z-50 w-full neu-flat"
@@ -16,7 +17,7 @@ import Icon from "@/components/icons/Icon.astro";
       >
         <Icon name="globe" size={16} />
       </span>
-      <span class="text-foreground tracking-tight">FormulaVerse</span>
+      <span class="text-foreground tracking-tight">{SITE_NAME}</span>
     </a>
 
     <nav class="hidden md:flex items-center gap-1 text-sm flex-1 justify-center">

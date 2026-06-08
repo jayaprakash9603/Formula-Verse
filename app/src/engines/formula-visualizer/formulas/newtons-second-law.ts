@@ -1,4 +1,4 @@
-import type { FormulaVisualizerConfig } from "../types";
+﻿import type { FormulaVisualizerConfig } from "../types";
 
 const newtonsSecondLaw: FormulaVisualizerConfig = {
   slug: "newtons-second-law-visualizer",
@@ -76,7 +76,7 @@ const newtonsSecondLaw: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["kinetic-energy-visualizer", "einsteins-emc2-visualizer"],
   seo: {
-    title: "Newton's Second Law F=ma Visualizer — FormulaVerse",
+    title: "Newton's Second Law F=ma Visualizer — QuickCalci Formulas",
     description:
       "Visualize F = ma with an animated block, force arrows, and acceleration gauge. Adjust mass and acceleration and see force update in real time.",
   },

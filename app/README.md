@@ -1,8 +1,8 @@
-# 🌐 FormulaVerse
+# QuickCalci Formulas
 
 Interactive formula visualizers for math, physics, finance, chemistry, and engineering.
 
-**Live site:** https://formulaverse.tools
+**Live site:** https://formulas.quickcalci.com
 
 ---
 
@@ -150,7 +150,7 @@ The dormancy is enforced at:
 
 ```bash
 # First deploy (creates the project)
-npx wrangler pages project create formulaverse
+npx wrangler pages project create quickcalci-formulas
 
 # Deploy after build
 npm run deploy
@@ -158,7 +158,7 @@ npm run deploy
 
 ### GitHub → Cloudflare Pages
 
-Connect `jayaprakash9603/Formula-Verse` in the Cloudflare dashboard:
+Connect your GitHub repository in the Cloudflare dashboard and add custom domain `formulas.quickcalci.com`:
 
 | Setting | Value |
 |---------|-------|

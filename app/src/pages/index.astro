@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import FormulaAnimCard from "@/components/cards/FormulaAnimCard";
+import FormulaMarquee from "@/components/site/FormulaMarquee";
 import Icon from "@/components/icons/Icon.astro";
 import { getFeaturedFormulas, getLiveFormulas } from "@/lib/formulas";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
@@ -51,15 +52,6 @@ const cardData = featured.map((f) => ({
   vars: f.vars.map((v) => ({ symbol: v.symbol })),
   animFrames: buildFrames(f),
 }));
-
-/* Repeated twice for seamless marquee */
-const marqueeGlyphs = [
-  "E = mc^2", "F = ma", "a^2 + b^2 = c^2", "A = \\pi r^2",
-  "PV = nRT", "V = IR", "\\Delta x = v_0 t + \\tfrac{1}{2} a t^2",
-  "\\int_a^b f(x)\\,dx", "\\sum_{n=0}^{\\infty} \\tfrac{1}{n!}",
-  "\\nabla \\cdot \\vec{E} = \\tfrac{\\rho}{\\varepsilon_0}",
-  "e^{i\\pi} + 1 = 0", "\\tfrac{d}{dx} \\sin x = \\cos x",
-];
 
 const categories = [
   { key: "math",        icon: "calculator",    label: "Mathematics" },
@@ -205,23 +197,7 @@ const stats = [
   </section>
 
   <!-- ─────────────────────── TRUST / MARQUEE ─────────────────────── -->
-  <section class="relative py-8 overflow-hidden bg-card">
-    <div class="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-         style="background: linear-gradient(to right, var(--card), transparent);" />
-    <div class="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-         style="background: linear-gradient(to left, var(--card), transparent);" />
-
-    <div class="flex animate-marquee" style="width: max-content;">
-      {[...marqueeGlyphs, ...marqueeGlyphs].map((g) => (
-        <span
-          class="font-mono text-base sm:text-lg whitespace-nowrap px-8"
-          style="color: var(--muted-foreground); opacity: 0.6;"
-        >
-          {g}
-        </span>
-      ))}
-    </div>
-  </section>
+  <FormulaMarquee client:visible />
 
   <!-- ────────────────────────── STATS ────────────────────────── -->
   <section>
@@ -365,11 +341,10 @@ const stats = [
       {categories.map((c) => (
         <a
           href={`/formulas/${c.key}`}
-          class="group relative flex flex-col items-start gap-4 neu-raised rounded-2xl p-6 formula-card-hover bg-card"
+          class="group category-card relative flex flex-col items-start gap-4 neu-raised rounded-2xl p-6 formula-card-hover"
         >
           <div
-            class="flex h-11 w-11 items-center justify-center rounded-xl transition-colors"
-            style="background: var(--muted); color: var(--foreground);"
+            class="category-card-icon neu-inset flex h-11 w-11 items-center justify-center rounded-xl"
           >
             <Icon name={c.icon} size={20} class="transition-transform group-hover:scale-110" />
           </div>
@@ -397,7 +372,7 @@ const stats = [
   <section class="bg-card">
     <div class="w-full page-wrap py-20 sm:py-24">
       <div class="reveal-on-scroll mb-12 text-center max-w-xl mx-auto">
-        <div class="text-[11px] uppercase tracking-widest text-muted-foreground mb-3">— Why FormulaVerse</div>
+        <div class="text-[11px] uppercase tracking-widest text-muted-foreground mb-3">— Why {SITE_NAME}</div>
         <h2 class="font-display font-bold text-3xl sm:text-4xl tracking-tight">Built for intuition, not memorization.</h2>
       </div>
 

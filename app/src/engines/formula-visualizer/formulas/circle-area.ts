@@ -1,4 +1,4 @@
-import type { FormulaVisualizerConfig } from "../types";
+﻿import type { FormulaVisualizerConfig } from "../types";
 
 const circleArea: FormulaVisualizerConfig = {
   slug: "circle-area-visualizer",
@@ -176,7 +176,7 @@ ${Array.from({ length: rings }, (_, i) => {
   ],
   relatedSlugs: ["pythagorean-theorem-visualizer", "sphere-volume-visualizer"],
   seo: {
-    title: "Circle Area Calculator & Visualizer — FormulaVerse",
+    title: "Circle Area Calculator & Visualizer — QuickCalci Formulas",
     description:
       "See A = πr² come alive with animated concentric rings. Adjust the radius and watch the circle area update instantly with live labels.",
   },

@@ -1,4 +1,4 @@
-import type { FormulaVisualizerConfig } from "../types";
+﻿import type { FormulaVisualizerConfig } from "../types";
 
 const ohmsLaw: FormulaVisualizerConfig = {
   slug: "ohms-law-visualizer",
@@ -85,7 +85,7 @@ const ohmsLaw: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["wave-equation-visualizer", "newtons-second-law-visualizer"],
   seo: {
-    title: "Ohm's Law V=IR Calculator & Visualizer — FormulaVerse",
+    title: "Ohm's Law V=IR Calculator & Visualizer — QuickCalci Formulas",
     description:
       "Explore V = IR with an animated circuit diagram. Current dots flow around the loop, the resistor glows with R, and voltage updates live.",
   },

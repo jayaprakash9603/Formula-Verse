@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, readdirSync } from "fs";
 import { join } from "path";
 
 const DIST = join(process.cwd(), "dist");
-const SITE = "https://formulaverse.tools";
+const SITE = "https://formulas.quickcalci.com";
 
 const parts = readdirSync(DIST)
   .filter((f) => /^sitemap-\d+\.xml$/.test(f))

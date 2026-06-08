@@ -22,6 +22,8 @@ interface Props {
 
 const { config, subPage, title } = Astro.props;
 
+const isExplainPage = subPage === "explain";
+
 const baseUrl = `${SITE_URL}/tools/${config.slug}`;
 const pageUrl = subPage === "index" ? baseUrl : `${baseUrl}/${subPage}`;
 
@@ -63,40 +65,41 @@ const sidebarFormulas = getLiveFormulas().map((f) => ({
   description={config.seo.description}
   ogImage={`/og/${config.slug}.png`}
   canonical={pageUrl}
-  hideFooter={subPage === "index"}
+  hideFooter={subPage === "index" || isExplainPage}
 >
   <Fragment slot="head">
     {jsonLdBlocks.map((block) => <JsonLd data={block} />)}
     <slot name="head" />
   </Fragment>
 
-  <div class="tool-page tool-page--sub">
-  <!-- Breadcrumbs + sub-page nav — full width, directly below site header -->
-  <div class="w-full px-4 sm:px-6 tool-topbar neu-flat border-b border-[var(--hairline)]">
-    <Breadcrumbs items={crumbs} />
-    <div class="pb-2">
-      <SubPageNav slug={config.slug} current={subPage} />
+  {isExplainPage ? (
+    <div class="tool-page tool-page--explain w-full">
+      <slot />
     </div>
-  </div>
+  ) : (
+    <div class="tool-page tool-page--sub">
+      <div class="w-full px-2 sm:px-3 tool-topbar neu-flat border-b border-[var(--hairline)]">
+        <Breadcrumbs items={crumbs} />
+        <div class="pb-2">
+          <SubPageNav slug={config.slug} current={subPage} />
+        </div>
+      </div>
 
-  <!-- Full-width flex wrapper: sidebar + main -->
-  <div class="flex w-full tool-layout-wrap">
+      <div class="flex w-full tool-layout-wrap">
+        <FormulaSidebar
+          formulas={sidebarFormulas}
+          currentSlug={config.slug}
+          client:load
+        />
 
-    <!-- Sidebar — sticky on desktop, slide-over on mobile -->
-    <FormulaSidebar
-      formulas={sidebarFormulas}
-      currentSlug={config.slug}
-      client:load
-    />
-
-    <!-- Main content area -->
-    <div class="flex-1 min-w-0 overflow-x-hidden flex flex-col">
-      <div class="flex-1">
-        <slot />
+        <div class="flex-1 min-w-0 overflow-x-hidden flex flex-col">
+          <div class="flex-1">
+            <slot />
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  </div>
+  )}
 </BaseLayout>
 
 <style>
@@ -107,6 +110,11 @@ const sidebarFormulas = getLiveFormulas().map((f) => ({
   }
   .tool-page--sub {
     --fv-topbar-h: 4.5rem;
+  }
+  .tool-page--explain {
+    --fv-topbar-h: 0;
+    --fv-stack-top: var(--fv-header-h);
+    min-height: calc(100dvh - var(--fv-header-h));
   }
   .tool-layout-wrap {
     min-height: calc(100vh - var(--fv-stack-top));

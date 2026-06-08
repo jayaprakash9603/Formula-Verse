@@ -5,7 +5,7 @@
 
 import { FORMULA_REGISTRY, FORMULA_SLUGS_LIVE } from "../src/engines/formula-visualizer/index.ts";
 
-const SITE_URL = "https://formulaverse.tools";
+const SITE_URL = "https://formulas.quickcalci.com";
 let errors = 0;
 
 function fail(slug, msg) {

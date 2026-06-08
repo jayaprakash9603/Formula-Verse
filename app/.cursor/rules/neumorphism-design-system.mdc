@@ -1,12 +1,12 @@
 ---
-description: Neumorphism design system for FormulaVerse — all UI must use neu tokens and abstractions
+description: Neumorphism design system for QuickCalci Formulas — all UI must use neu tokens and abstractions
 globs: app/src/**/*
 alwaysApply: false
 ---
 
 # Neumorphism Design System
 
-FormulaVerse uses a neumorphic (soft UI) design system. All new and modified components must follow these rules.
+QuickCalci Formulas uses a neumorphic (soft UI) design system. All new and modified components must follow these rules.
 
 ## Required tokens
 

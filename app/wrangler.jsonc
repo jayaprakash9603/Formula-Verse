@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "formulaverse",
+  "name": "quickcalci-formulas",
   "compatibility_date": "2026-04-21",
   "pages_build_output_dir": "dist",
   "assets": {
@@ -11,6 +11,6 @@
     "html_handling": "drop-trailing-slash"
   },
   "vars": {
-    "SITE_URL": "https://formulaverse.tools"
+    "SITE_URL": "https://formulas.quickcalci.com"
   }
 }

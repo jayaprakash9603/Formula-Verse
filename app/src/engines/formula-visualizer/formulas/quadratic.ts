@@ -1,4 +1,4 @@
-import type { FormulaVisualizerConfig } from "../types";
+﻿import type { FormulaVisualizerConfig } from "../types";
 
 const quadratic: FormulaVisualizerConfig = {
   slug: "quadratic-formula-visualizer",
@@ -175,7 +175,7 @@ const quadratic: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["pythagorean-theorem-visualizer", "wave-equation-visualizer"],
   seo: {
-    title: "Quadratic Formula Calculator & Visualizer — FormulaVerse",
+    title: "Quadratic Formula Calculator & Visualizer — QuickCalci Formulas",
     description:
       "Visualize x = (−b ± √(b²−4ac)) / 2a with an animated interactive parabola. See roots as glowing dots and the vertex in real time.",
   },

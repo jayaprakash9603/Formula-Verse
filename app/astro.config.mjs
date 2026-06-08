@@ -20,7 +20,7 @@ const LIVE_SLUGS = [
 ];
 
 export default defineConfig({
-  site: "https://formulaverse.tools",
+  site: "https://formulas.quickcalci.com",
   output: "static",
   trailingSlash: "ignore",
   devToolbar: {

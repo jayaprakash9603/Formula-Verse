@@ -35,8 +35,8 @@ async function generateOg(config) {
       <text x="60" y="160" fill="${color}cc" font-size="32" font-family="ui-monospace, monospace">${escapeXml(config.shortForm)}</text>
       <text x="60" y="240" fill="#94a3b8" font-size="28" font-family="system-ui">${escapeXml(config.tagline.slice(0, 60))}</text>
       <rect x="60" y="380" width="${w - 120}" height="2" fill="${color}30"/>
-      <text x="60" y="440" fill="#94a3b8" font-size="22" font-family="system-ui">formulaverse.tools</text>
-      <text x="${w - 60}" y="440" fill="${color}" font-size="22" font-family="system-ui" text-anchor="end">FormulaVerse</text>
+      <text x="60" y="440" fill="#94a3b8" font-size="22" font-family="system-ui">formulas.quickcalci.com</text>
+      <text x="${w - 60}" y="440" fill="${color}" font-size="22" font-family="system-ui" text-anchor="end">QuickCalci Formulas</text>
     </svg>
   `;
 
@@ -53,9 +53,9 @@ function escapeXml(str) {
 const defaultSvg = `
   <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
     <rect width="1200" height="630" fill="#0a0a14"/>
-    <text x="600" y="280" fill="white" font-size="72" font-family="system-ui" font-weight="bold" text-anchor="middle">🌐 FormulaVerse</text>
+    <text x="600" y="280" fill="white" font-size="72" font-family="system-ui" font-weight="bold" text-anchor="middle">QuickCalci Formulas</text>
     <text x="600" y="360" fill="#94a3b8" font-size="32" font-family="system-ui" text-anchor="middle">Interactive Formula Visualizers</text>
-    <text x="600" y="430" fill="#8b5cf6" font-size="24" font-family="system-ui" text-anchor="middle">formulaverse.tools</text>
+    <text x="600" y="430" fill="#8b5cf6" font-size="24" font-family="system-ui" text-anchor="middle">formulas.quickcalci.com</text>
   </svg>
 `;
 await sharp(Buffer.from(defaultSvg)).png().toFile(join(OUT_DIR, "default.png"));

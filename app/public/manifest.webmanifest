@@ -1,6 +1,6 @@
 {
-  "name": "FormulaVerse",
-  "short_name": "FormulaVerse",
+  "name": "QuickCalci Formulas",
+  "short_name": "Formulas",
   "description": "Interactive formula visualizers for math, physics, finance, chemistry, and engineering.",
   "start_url": "/",
   "display": "standalone",

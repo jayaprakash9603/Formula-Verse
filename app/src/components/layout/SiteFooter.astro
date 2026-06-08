@@ -1,6 +1,6 @@
 ---
 import Icon from "@/components/icons/Icon.astro";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_DOMAIN, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const MATH_LINKS = [
   { href: "/tools/pythagorean-theorem-visualizer", label: "Pythagorean Theorem" },
@@ -21,7 +21,7 @@ const OTHER_LINKS = [
   { href: "/tools/ohms-law-visualizer", label: "Ohm's Law" },
   { href: "/tools/ideal-gas-law-visualizer", label: "Ideal Gas Law" },
   { href: "/formulas", label: "All Formulas List" },
-  { href: "/about", label: "About FormulaVerse" },
+  { href: "/about", label: `About ${SITE_NAME}` },
 ];
 
 const SOCIALS = [
@@ -58,7 +58,7 @@ const POLICIES = [
       </div>
       
       <p class="text-xs leading-relaxed text-muted-foreground max-w-sm">
-        FormulaVerse keeps the useful stuff in one place: interactive formula visualizers for math, physics, finance, chemistry, and engineering you can open and use right away. Free, open-access, and runs fully in your web browser.
+        {SITE_NAME} keeps the useful stuff in one place: interactive formula visualizers for math, physics, finance, chemistry, and engineering you can open and use right away. Free, open-access, and runs fully in your web browser.
       </p>
 
       <div class="pt-2">
@@ -206,7 +206,7 @@ const POLICIES = [
           href={SITE_URL}
           class="font-mono text-primary hover:underline neu-flat px-3.5 py-2 rounded-xl bg-card text-[11px] font-bold"
         >
-          {SITE_URL.replace("https://", "")}
+          {SITE_DOMAIN}
         </a>
 
         <!-- Back to Top Rounded Pill Button -->
