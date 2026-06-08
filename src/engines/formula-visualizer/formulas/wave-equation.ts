@@ -119,7 +119,7 @@ const waveEquation: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["ohms-law-visualizer", "compound-interest-visualizer"],
   seo: {
-    title: "Wave Equation v=fλ Calculator & Visualizer — QuickCalci Formulas",
+    title: "Wave Equation v=fλ Calculator & Visualizer — QuickCalci",
     description:
       "Explore v = fλ with an animated sine wave that shifts colour with frequency. Adjust frequency and wavelength and see wave speed update live.",
   },

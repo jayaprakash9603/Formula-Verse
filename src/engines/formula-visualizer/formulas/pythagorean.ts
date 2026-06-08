@@ -212,7 +212,7 @@ const pythagorean: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["circle-area-visualizer", "pythagorean-3d-theorem"],
   seo: {
-    title: "Pythagorean Theorem Calculator & Visualizer — QuickCalci Formulas",
+    title: "Pythagorean Theorem Calculator & Visualizer — QuickCalci",
     description:
       "Interactively visualize a² + b² = c² with animated coloured squares. Adjust sides in real time and see the hypotenuse update instantly.",
   },

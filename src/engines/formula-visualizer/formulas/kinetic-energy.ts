@@ -107,7 +107,7 @@ const kineticEnergy: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["newtons-second-law-visualizer", "einsteins-emc2-visualizer"],
   seo: {
-    title: "Kinetic Energy KE=½mv² Visualizer — QuickCalci Formulas",
+    title: "Kinetic Energy KE=½mv² Visualizer — QuickCalci",
     description:
       "Visualize KE = ½mv² with an animated rolling ball that changes colour with speed. See how velocity squared makes energy grow explosively.",
   },

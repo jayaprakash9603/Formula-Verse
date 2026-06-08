@@ -80,7 +80,7 @@ const pythagorean3d: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["pythagorean-theorem-visualizer", "sphere-volume-visualizer"],
   seo: {
-    title: "3D Pythagorean Theorem a²+b²+c²=d² — QuickCalci Formulas",
+    title: "3D Pythagorean Theorem a²+b²+c²=d² — QuickCalci",
     description:
       "Explore a²+b²+c²=d² with an interactive 3D rotating cuboid. See the space diagonal glow as you adjust width, depth, and height.",
   },

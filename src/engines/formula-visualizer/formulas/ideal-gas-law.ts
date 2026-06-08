@@ -82,7 +82,7 @@ const idealGasLaw: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["sphere-volume-visualizer", "pythagorean-3d-theorem"],
   seo: {
-    title: "Ideal Gas Law PV=nRT Calculator & Visualizer — QuickCalci Formulas",
+    title: "Ideal Gas Law PV=nRT Calculator & Visualizer — QuickCalci",
     description:
       "Explore PV = nRT with a 3D animated container of bouncing gas molecules. Adjust temperature, volume, and moles to see pressure respond live.",
   },

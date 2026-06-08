@@ -92,7 +92,7 @@ const sphereVolume: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["circle-area-visualizer", "ideal-gas-law-visualizer"],
   seo: {
-    title: "Sphere Volume Calculator & Visualizer — QuickCalci Formulas",
+    title: "Sphere Volume Calculator & Visualizer — QuickCalci",
     description:
       "Explore V = (4/3)πr³ with a 3D interactive sphere. See volume and surface area update live, with a same-volume cube for comparison.",
   },

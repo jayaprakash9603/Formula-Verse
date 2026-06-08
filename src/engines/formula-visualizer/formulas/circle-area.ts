@@ -176,7 +176,7 @@ ${Array.from({ length: rings }, (_, i) => {
   ],
   relatedSlugs: ["pythagorean-theorem-visualizer", "sphere-volume-visualizer"],
   seo: {
-    title: "Circle Area Calculator & Visualizer — QuickCalci Formulas",
+    title: "Circle Area Calculator & Visualizer — QuickCalci",
     description:
       "See A = πr² come alive with animated concentric rings. Adjust the radius and watch the circle area update instantly with live labels.",
   },

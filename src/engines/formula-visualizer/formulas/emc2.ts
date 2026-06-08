@@ -137,7 +137,7 @@ const emc2: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["newtons-second-law-visualizer", "kinetic-energy-visualizer"],
   seo: {
-    title: "Einstein's E=mc² Calculator & Visualizer — QuickCalci Formulas",
+    title: "Einstein's E=mc² Calculator & Visualizer — QuickCalci",
     description:
       "Explore mass-energy equivalence with a live animated visualizer. Adjust mass and see the energy output on a logarithmic scale with glowing rays.",
   },

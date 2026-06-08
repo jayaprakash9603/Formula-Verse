@@ -120,7 +120,7 @@ const compoundInterest: FormulaVisualizerConfig = {
   ],
   relatedSlugs: ["wave-equation-visualizer", "sphere-volume-visualizer"],
   seo: {
-    title: "Compound Interest Calculator & Visualizer — QuickCalci Formulas",
+    title: "Compound Interest Calculator & Visualizer — QuickCalci",
     description:
       "Visualize A = P(1+r/n)^(nt) with an animated bar chart. Compare compound vs simple interest growth year by year.",
   },
